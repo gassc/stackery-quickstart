@@ -27,7 +27,6 @@ Resources:
                 uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${newItem.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
-      TracingEnabled: true
       Cors:
         AllowHeaders: '''Authorization,Content-Type'''
         AllowOrigin: '''*'''

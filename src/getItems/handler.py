@@ -1,6 +1,29 @@
-import json
-def handler(event, context):
-    # Log the event argument for debugging and for use in local development.
-    print(json.dumps(event))
+import os
+import boto3
 
-    return {}
+dynamodb = boto3.resource('dynamodb')
+
+def handler(event, context):
+
+    # get the table name from the automatically populated environment variables
+    table_name = os.environ['TABLE_NAME'] 
+    print("Getting data from table", table_name)
+    table = dynamodb.Table(table_name)
+
+    # Use dynamodb to get items from the Items table
+    result = table.scan()
+    result_count = result['Count']
+    items = result['Items']
+
+    for item in items:
+        item_id = item['id']
+        content = item['content']
+        print(f'Item {item_id}: {content}')
+
+    # Create a response
+    response = {
+        'statusCode': 200,
+        'body': f'{result_count} items found'
+    }
+
+    return response
